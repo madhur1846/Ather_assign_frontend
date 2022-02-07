@@ -70,6 +70,7 @@ export default function AddRestaurant() {
   let paymentError = null;
 
   if (errors) {
+    console.log(errors);
     for (let error of errors) {
       if (error.msg.includes("valid email")) emailError = error.msg;
       if (error.msg.includes("Email address already")) emailError = error.msg;
@@ -389,7 +390,7 @@ export default function AddRestaurant() {
                     className={classes.small}
                     style={{ marginLeft: "260px" }}
                   >
-                    Partner with FoodHub and scale your business
+                    Partner with FOODDEV and scale your business
                   </small>
                 </form>
               </Grid>

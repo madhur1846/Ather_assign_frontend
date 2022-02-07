@@ -11,8 +11,7 @@ import {
   SET_ERRORS_SIGNUP_SELLER,
 } from "../types";
 
-import axios from "../../util/axios";
-import axiosNewInstance from "axios";
+import axios from "axios";
 
 export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
@@ -72,6 +71,7 @@ export const getUserData = () => (dispatch) => {
   axios
     .get("/user")
     .then((res) => {
+      // console.log(res);
       dispatch({
         type: SET_USER,
         payload: res.data.result,
@@ -80,22 +80,26 @@ export const getUserData = () => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const signupSeller = (newSellerData, history) => (dispatch) => {
-  const location = `+${newSellerData.get("aptName")},+${newSellerData.get(
+export const signupSeller =  (newSellerData, history) => async (dispatch) => {
+  const location = `+${newSellerData.get(
     "locality"
   )},+${newSellerData.get("street")},+${newSellerData.get("zip")}`;
-  axiosNewInstance
-    .get("https://maps.googleapis.com/maps/api/geocode/json", {
-      params: {
-        address: location,
-        key: process.env.REACT_APP_GOOGLE_API_KEY,
-      },
-    })
-    .then((result) => {
+  console.log(location);
+  try {
+    const result = await axios
+      .get("https://maps.googleapis.com/maps/api/geocode/json", {
+        params: {
+          address: location,
+          key: process.env.REACT_APP_GOOGLE_API_KEY,
+        },
+      });
+
+      console.log("Hello Result :" + result.data.results.formatted_address)
       if (
         Array.isArray(result.data.results) &&
         result.data.results.length > 0
       ) {
+        // console.log("Formattted Address : " + result.data.results[0])
         const formattedAddress = result.data.results[0].formatted_address;
         const lat = result.data.results[0].geometry.location.lat;
         const lng = result.data.results[0].geometry.location.lng;
@@ -105,10 +109,10 @@ export const signupSeller = (newSellerData, history) => (dispatch) => {
       }
 
       dispatch(signupSellerFinal(newSellerData, history));
-    })
-    .catch((err) => {
+  }
+    catch(err) {
       console.log(err);
-    });
+    }
 };
 
 export const signupSellerFinal = (newSellerData, history) => (dispatch) => {

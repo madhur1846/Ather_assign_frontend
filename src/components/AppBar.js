@@ -36,7 +36,7 @@ export default function AppBarPrimary() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-
+  // console.log(useSelector((state) => state.auth))
   const {
     account: { role },
     authenticated,
@@ -54,7 +54,7 @@ export default function AppBarPrimary() {
       <Toolbar>
         <Link to="/" className={classes.title}>
           <Typography variant="h6" noWrap>
-            <span className={classes.name}>FoodHub</span>
+            <span className={classes.name}>FOODDEV</span>
           </Typography>
         </Link>
         {authenticated ? (
